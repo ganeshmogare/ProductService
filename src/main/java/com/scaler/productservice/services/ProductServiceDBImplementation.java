@@ -19,4 +19,9 @@ public class ProductServiceDBImplementation implements ProductService{
     public ArrayList<Product> getAllProducts() {
         return null;
     }
+
+    @Override
+    public Product getProduct(Long id) {
+        return null;
+    }
 }

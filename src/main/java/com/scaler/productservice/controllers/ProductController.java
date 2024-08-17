@@ -41,9 +41,11 @@ public class ProductController {
         return GetAllProductsResponse.fromProducts(products);
     }
 
-    @GetMapping("{id}")
-    public String getSingleProduct(@PathVariable("id")Long id){
-        return "Hey!! this is your id : " + id;
+    @GetMapping("/{id}")
+    public GetProductResponse getSingleProduct(@PathVariable("id")Long id){
+        Product product = productService.getProduct(id);
+
+        return GetProductResponse.fromProduct(product);
     }
 
     @DeleteMapping("{id}")

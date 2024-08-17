@@ -31,6 +31,30 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
                 request,
                 CreateFakestoreProductResponse.class);
 
+        if(response == null) return null;
+
+        return prepareProductObj(response);
+    }
+
+    @Override
+    public ArrayList<Product> getAllProducts() {
+        CreateFakestoreProductResponse[] response =  restTemplate.getForObject("https://fakestoreapi.com/products",
+                CreateFakestoreProductResponse[].class);
+
+        ArrayList<Product> result = new ArrayList<>();
+
+        if(response == null) return null;
+
+        for (int i=0;i<response.length;i++){
+
+            result.add(prepareProductObj(response[i]));
+        }
+
+
+        return result;
+    }
+
+    private Product prepareProductObj(CreateFakestoreProductResponse response){
         Product res = new Product();
         res.setId(response.getId());
         res.setTitle(response.getTitle());
@@ -43,25 +67,12 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
     }
 
     @Override
-    public ArrayList<Product> getAllProducts() {
-        CreateFakestoreProductResponse[] response =  restTemplate.getForObject("https://fakestoreapi.com/products",
-                CreateFakestoreProductResponse[].class);
+    public Product getProduct(Long id) {
+        CreateFakestoreProductResponse response =  restTemplate.getForObject("https://fakestoreapi.com/products/{0}",
+                CreateFakestoreProductResponse.class, id);
 
-        ArrayList<Product> result = new ArrayList<>();
+        if(response == null) return null;
 
-        for (int i=0;i<response.length;i++){
-            Product res = new Product();
-            res.setId(response[i].getId());
-            res.setTitle(response[i].getTitle());
-            res.setDescription(response[i].getDescription());
-            res.setPrice(response[i].getPrice());
-            res.setImageUrl(response[i].getImageUrl());
-            res.setCategoryName(response[i].getCategory());
-
-            result.add(res);
-        }
-
-
-        return result;
+        return prepareProductObj(response);
     }
 }
