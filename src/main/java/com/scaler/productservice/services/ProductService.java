@@ -11,4 +11,10 @@ public interface ProductService {
     ArrayList<Product> getAllProducts();
 
     Product getProduct(Long id);
+
+    void deleteProduct(Long id);
+
+    Product updateProduct(Long id, Product product);
+
+    String replaceProduct(Long id, Product product);
 }

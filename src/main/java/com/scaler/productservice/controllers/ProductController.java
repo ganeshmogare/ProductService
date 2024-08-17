@@ -1,9 +1,6 @@
 package com.scaler.productservice.controllers;
 
-import com.scaler.productservice.dtos.CreateProductRequest;
-import com.scaler.productservice.dtos.CreateProductResponse;
-import com.scaler.productservice.dtos.GetAllProductsResponse;
-import com.scaler.productservice.dtos.GetProductResponse;
+import com.scaler.productservice.dtos.*;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,8 +46,23 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteProduct(@PathVariable("id") Long id){
+    public String deleteProduct(@PathVariable("id") Long id){
+        productService.deleteProduct(id);
 
+        return "Product with id "+ id + " is deleted successfully!!!";
+    }
+
+    @PatchMapping("{id}")
+    public UpdateProductResponse updateProduct(@RequestBody UpdateProductRequest updateProductData, @PathVariable("id") Long id){
+        Product product = productService.updateProduct(id, updateProductData.toProduct());
+        return UpdateProductResponse.fromProduct(product);
+    }
+
+
+    @PutMapping("{id}")
+    public String replaceProduct(@RequestBody ReplaceProductRequest replaceProductData, @PathVariable("id") Long id){
+        return productService.replaceProduct(id, replaceProductData.toProduct());
+        //return ReplaceProductResponse.fromProduct(product);
     }
 
     //custom mapping

@@ -24,4 +24,18 @@ public class ProductServiceDBImplementation implements ProductService{
     public Product getProduct(Long id) {
         return null;
     }
+
+    @Override
+    public void deleteProduct(Long id) {
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        return null;
+    }
+
+    @Override
+    public String replaceProduct(Long id, Product product) {
+        return null;
+    }
 }

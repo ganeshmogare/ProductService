@@ -1,8 +1,6 @@
 package com.scaler.productservice.services;
 
-import com.scaler.productservice.dtos.CreateFakestoreProductRequest;
-import com.scaler.productservice.dtos.CreateFakestoreProductResponse;
-import com.scaler.productservice.dtos.CreateProductResponse;
+import com.scaler.productservice.dtos.*;
 import com.scaler.productservice.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -66,13 +64,53 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
         return res;
     }
 
+    private Product prepareProductObjForGet(GetProductResponse response){
+        Product res = new Product();
+        res.setId(response.getId());
+        res.setTitle(response.getTitle());
+        res.setDescription(response.getDescription());
+        res.setPrice(response.getPrice());
+        res.setImageUrl(response.getImageUrl());
+        res.setCategoryName(response.getCategoryName());
+
+        return res;
+    }
+
     @Override
     public Product getProduct(Long id) {
-        CreateFakestoreProductResponse response =  restTemplate.getForObject("https://fakestoreapi.com/products/{0}",
-                CreateFakestoreProductResponse.class, id);
+        GetProductResponse response =  restTemplate.getForObject("https://fakestoreapi.com/products/{0}",
+                GetProductResponse.class, id);
 
         if(response == null) return null;
 
-        return prepareProductObj(response);
+        return prepareProductObjForGet(response);
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        restTemplate.delete("https://fakestoreapi.com/products/{0}", id);
+    }
+
+    @Override
+    public Product updateProduct(Long id,Product product) {
+        UpdateProductResponse response = restTemplate.patchForObject("https://fakestoreapi.com/products/{0}", product, UpdateProductResponse.class, id);
+
+        Product res = new Product();
+        res.setId(response.getId());
+        res.setTitle(response.getTitle());
+        res.setDescription(response.getDescription());
+        res.setPrice(response.getPrice());
+        res.setImageUrl(response.getImageUrl());
+        res.setCategoryName(response.getCategoryName());
+
+        return res;
+    }
+
+    @Override
+    public String replaceProduct(Long id, Product product) {
+        product.setId(id);
+        restTemplate.put("https://fakestoreapi.com/products/{0}", product, id);
+
+        return "Product replaced successfully";
     }
 }
