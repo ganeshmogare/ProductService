@@ -1,6 +1,7 @@
 package com.scaler.productservice.controllers;
 
 import com.scaler.productservice.dtos.*;
+import com.scaler.productservice.exceptions.ProductNotFound;
 import com.scaler.productservice.models.Product;
 import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ public class ProductController {
 //    @Qualifier()
     private ProductService productService;
 
-    ProductController(@Qualifier("fakeStoreService") ProductService productService){
+    ProductController(@Qualifier("dbService") ProductService productService){
         this.productService = productService;
     }
 
@@ -46,14 +47,14 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public String deleteProduct(@PathVariable("id") Long id){
+    public String deleteProduct(@PathVariable("id") Long id) throws ProductNotFound {
         productService.deleteProduct(id);
 
         return "Product with id "+ id + " is deleted successfully!!!";
     }
 
     @PatchMapping("{id}")
-    public UpdateProductResponse updateProduct(@RequestBody UpdateProductRequest updateProductData, @PathVariable("id") Long id){
+    public UpdateProductResponse updateProduct(@RequestBody UpdateProductRequest updateProductData, @PathVariable("id") Long id) throws ProductNotFound {
         Product product = productService.updateProduct(id, updateProductData.toProduct());
         return UpdateProductResponse.fromProduct(product);
     }

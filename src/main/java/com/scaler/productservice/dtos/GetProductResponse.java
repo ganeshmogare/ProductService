@@ -13,7 +13,7 @@ public class GetProductResponse {
     private String description;
     private String imageUrl;
     private Double price;
-    private String categoryName;
+    private String category;
 
     public static GetProductResponse fromProduct(Product product){
      GetProductResponse response = new GetProductResponse();
@@ -21,7 +21,7 @@ public class GetProductResponse {
      response.setTitle(product.getTitle());
      response.setPrice(product.getPrice());
      response.setImageUrl(product.getImageUrl());
-     response.setCategoryName(product.getCategoryName());
+     response.setCategory(product.getCategory().getName());
      response.setDescription(product.getDescription());
 
      return response;

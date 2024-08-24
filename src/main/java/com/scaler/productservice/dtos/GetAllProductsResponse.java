@@ -20,16 +20,7 @@ public class GetAllProductsResponse {
         GetAllProductsResponse result = new GetAllProductsResponse();
 
         for(int i=0;i<products.size();i++){
-            GetProductResponse response = new GetProductResponse();
-
-            Product product = products.get(i);
-            response.setId(product.getId());
-            response.setTitle(product.getTitle());
-            response.setPrice(product.getPrice());
-            response.setImageUrl(product.getImageUrl());
-            response.setCategoryName(product.getCategoryName());
-            response.setDescription(product.getDescription());
-
+            GetProductResponse response = GetProductResponse.fromProduct(products.get(i));
             result.addProduct(response);
         }
 

@@ -1,5 +1,6 @@
 package com.scaler.productservice.dtos;
 
+import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public class UpdateProductResponse {
     private String description;
     private Double price;
     private String imageUrl;
-    private String categoryName;
+    private String category;
 
     public static UpdateProductResponse fromProduct(Product product){
         UpdateProductResponse obj = new UpdateProductResponse();
@@ -21,7 +22,7 @@ public class UpdateProductResponse {
         obj.setDescription(product.getDescription());
         obj.setPrice(product.getPrice());
         obj.setImageUrl(product.getImageUrl());
-        obj.setCategoryName(product.getCategoryName());
+        obj.setCategory(product.getCategory().getName());
 
         return obj;
     }

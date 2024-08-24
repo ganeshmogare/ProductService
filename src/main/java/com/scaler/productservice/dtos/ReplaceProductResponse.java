@@ -21,7 +21,7 @@ public class ReplaceProductResponse {
         obj.setDescription(product.getDescription());
         obj.setPrice(product.getPrice());
         obj.setImageUrl(product.getImageUrl());
-        obj.setCategoryName(product.getCategoryName());
+        obj.setCategoryName(product.getCategory().getName());
 
         return obj;
     }

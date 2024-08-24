@@ -1,5 +1,6 @@
 package com.scaler.productservice.dtos;
 
+import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,9 @@ public class ReplaceProductRequest {
         obj.setDescription(this.getDescription());
         obj.setPrice(this.getPrice());
         obj.setImageUrl(this.getImageUrl());
-        obj.setCategoryName(this.getCategoryName());
+        Category category = new Category();
+        category.setName(this.getCategoryName());
+        obj.setCategory(category);
 
         return obj;
     }

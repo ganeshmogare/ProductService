@@ -1,5 +1,6 @@
 package com.scaler.productservice.services;
 
+import com.scaler.productservice.exceptions.ProductNotFound;
 import com.scaler.productservice.models.Product;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ public interface ProductService {
 
     Product getProduct(Long id);
 
-    void deleteProduct(Long id);
+    String deleteProduct(Long id) throws ProductNotFound;
 
-    Product updateProduct(Long id, Product product);
+    Product updateProduct(Long id, Product product) throws ProductNotFound;
 
     String replaceProduct(Long id, Product product);
 }

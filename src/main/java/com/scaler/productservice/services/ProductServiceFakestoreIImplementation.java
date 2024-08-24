@@ -1,6 +1,8 @@
 package com.scaler.productservice.services;
 
 import com.scaler.productservice.dtos.*;
+import com.scaler.productservice.exceptions.ProductNotFound;
+import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +26,7 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
         request.setDescription(product.getDescription());
         request.setPrice(request.getPrice());
         request.setImageUrl(product.getImageUrl());
-        request.setCategory(product.getCategoryName());
+        request.setCategory(product.getCategory().getName());
         CreateFakestoreProductResponse response =  restTemplate.postForObject("https://fakestoreapi.com/products",
                 request,
                 CreateFakestoreProductResponse.class);
@@ -59,7 +61,9 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
         res.setDescription(response.getDescription());
         res.setPrice(response.getPrice());
         res.setImageUrl(response.getImageUrl());
-        res.setCategoryName(response.getCategory());
+        Category category = new Category();
+        category.setName(response.getCategory());
+        res.setCategory(category);
 
         return res;
     }
@@ -71,7 +75,9 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
         res.setDescription(response.getDescription());
         res.setPrice(response.getPrice());
         res.setImageUrl(response.getImageUrl());
-        res.setCategoryName(response.getCategoryName());
+        Category category = new Category();
+        category.setName(response.getCategory());
+        res.setCategory(category);
 
         return res;
     }
@@ -87,9 +93,14 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public String deleteProduct(Long id) throws ProductNotFound {
+        if(id == null){
+            throw new ProductNotFound();
+        }
         restTemplate.delete("https://fakestoreapi.com/products/{0}", id);
-    }
+
+        return "Product with id "+ id + " is deleted successfully!!!";
+    };
 
     @Override
     public Product updateProduct(Long id,Product product) {
@@ -101,7 +112,9 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
         res.setDescription(response.getDescription());
         res.setPrice(response.getPrice());
         res.setImageUrl(response.getImageUrl());
-        res.setCategoryName(response.getCategoryName());
+        Category category = new Category();
+        category.setName(response.getCategory());
+        res.setCategory(category);
 
         return res;
     }
