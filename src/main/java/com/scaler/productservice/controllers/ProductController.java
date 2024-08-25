@@ -61,7 +61,7 @@ public class ProductController {
 
 
     @PutMapping("{id}")
-    public String replaceProduct(@RequestBody ReplaceProductRequest replaceProductData, @PathVariable("id") Long id){
+    public Product replaceProduct(@RequestBody ReplaceProductRequest replaceProductData, @PathVariable("id") Long id) throws ProductNotFound {
         return productService.replaceProduct(id, replaceProductData.toProduct());
         //return ReplaceProductResponse.fromProduct(product);
     }

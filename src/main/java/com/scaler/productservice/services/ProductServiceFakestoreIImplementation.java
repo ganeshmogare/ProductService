@@ -120,10 +120,17 @@ public class ProductServiceFakestoreIImplementation implements ProductService{
     }
 
     @Override
-    public String replaceProduct(Long id, Product product) {
+    public Product replaceProduct(Long id, Product product) {
         product.setId(id);
         restTemplate.put("https://fakestoreapi.com/products/{0}", product, id);
-
-        return "Product replaced successfully";
+        Product res = new Product();
+        res.setCreated_at(java.time.LocalDateTime.now());
+        res.setLast_updated_at(java.time.LocalDateTime.now());
+        res.setPrice(product.getPrice());
+        res.setImageUrl(product.getImageUrl());
+        res.setId(id);
+        res.setTitle(product.getTitle());
+        res.setDescription(product.getDescription());
+        return res;
     }
 }

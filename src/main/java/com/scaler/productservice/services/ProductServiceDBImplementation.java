@@ -75,12 +75,14 @@ public class ProductServiceDBImplementation implements ProductService{
 
     @Override
     public ArrayList<Product> getAllProducts() {
-        return null;
+        List<Product> products= productRepository.findAll();
+
+        return new ArrayList<>(products);
     }
 
     @Override
     public Product getProduct(Long id) {
-        return null;
+        return productRepository.findById(id).get();
     }
 
     @Override
@@ -133,7 +135,23 @@ public class ProductServiceDBImplementation implements ProductService{
     }
 
     @Override
-    public String replaceProduct(Long id, Product product) {
-        return null;
+    public Product replaceProduct(Long id, Product product) throws ProductNotFound{
+        Optional<Product> productToUpdateOptional = productRepository.findById(id);
+
+        if (productToUpdateOptional.isEmpty()) {
+            throw new ProductNotFound();
+        }
+
+        product.setId(id);
+
+        Category toBePutInProduct = getCategoryToBeInProduct(product);
+
+        product.setCategory(toBePutInProduct);
+        product.setLast_updated_at(java.time.LocalDateTime.now());
+        product.setCreated_at(java.time.LocalDateTime.now());
+
+        Product savedProduct = productRepository.save(product);
+
+        return savedProduct;
     }
 }
