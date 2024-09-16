@@ -8,7 +8,9 @@ import com.scaler.productservice.models.Product;
 import com.scaler.productservice.repositories.CategoryRepository;
 import com.scaler.productservice.repositories.ProductRepository;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +23,13 @@ public class ProductServiceDBImplementation implements ProductService{
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
 
+    private RedisTemplate redisTemplate;
+
     public ProductServiceDBImplementation(ProductRepository productRepository,
-                                CategoryRepository categoryRepository) {
+                                CategoryRepository categoryRepository, RedisTemplate redisTemplate) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.redisTemplate = redisTemplate;
     }
     @Override
     public Product createProduct(Product product) {
@@ -82,7 +87,21 @@ public class ProductServiceDBImplementation implements ProductService{
 
     @Override
     public Product getProduct(Long id) {
-        return productRepository.findById(id).get();
+        //check if the product exists in the redis cache
+        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_"+id);
+
+        //Cache hit , return the product
+        if(product != null){
+            return product;
+        }
+
+        //cache miss, query from Database
+        product = productRepository.findById(id).get();
+
+        //store product into cache
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_"+id, product);
+
+        return product;
     }
 
     @Override
