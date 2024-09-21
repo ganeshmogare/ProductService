@@ -7,6 +7,7 @@ import com.scaler.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +21,23 @@ public class ProductController {
 
 //    @Qualifier()
     private ProductService productService;
+    private RestTemplate restTemplate;
 
-    ProductController(@Qualifier("dbService") ProductService productService){
+    ProductController(@Qualifier("dbService") ProductService productService, RestTemplate restTemplate){
         this.productService = productService;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping("")
-    public CreateProductResponse createProduct(@RequestBody CreateProductRequest CreateProductData ){
+    public CreateProductResponse createProduct(@RequestHeader("Authorization") String token,@RequestBody CreateProductRequest CreateProductData ){
+        boolean isAuthenticated = restTemplate.getForObject(
+                "http://UserService/auth/validate?token=" + token,
+                Boolean.class
+        );
+
+        if (!isAuthenticated) {
+            return null;
+        }
         Product product =  productService.createProduct(CreateProductData.toProduct());
 
         return CreateProductResponse.fromProduct(product);
