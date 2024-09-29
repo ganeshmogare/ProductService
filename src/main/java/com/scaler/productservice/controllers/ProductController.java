@@ -43,6 +43,13 @@ public class ProductController {
         return CreateProductResponse.fromProduct(product);
     }
 
+    @PostMapping("test_create")
+    public CreateProductResponse createProductForTest(@RequestBody CreateProductRequest CreateProductData ){
+        Product product =  productService.createProduct(CreateProductData.toProduct());
+
+        return CreateProductResponse.fromProduct(product);
+    }
+
     @GetMapping("")
     public GetAllProductsResponse getAllProducts(){
         ArrayList<Product> products = productService.getAllProducts();

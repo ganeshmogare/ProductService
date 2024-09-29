@@ -1,5 +1,6 @@
 package com.scaler.productservice.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.scaler.productservice.models.Category;
 import com.scaler.productservice.models.Product;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreateProductRequest {
     private String title;
     private String description;
