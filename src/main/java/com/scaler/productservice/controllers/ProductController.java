@@ -52,6 +52,13 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public GetProductResponse getSingleProduct(@PathVariable("id")Long id){
+
+        if (id < 0) {
+            throw new RuntimeException("Product not found");
+        } else if(id == 0) {
+            throw new RuntimeException("Something very bad");
+        }
+
         Product product = productService.getProduct(id);
 
         return GetProductResponse.fromProduct(product);
